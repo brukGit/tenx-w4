@@ -1,0 +1,7 @@
+venv/
+scripts/output/
+deliverables/
+resources/
+data/machineLearning.txt
+/machineLearning.txt
+.dvc/cache
