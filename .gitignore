@@ -2,6 +2,7 @@ venv/
 scripts/output/
 deliverables/
 resources/
+notebooks/figures/
 data/machineLearning.txt
 /machineLearning.txt
 .dvc/cache
