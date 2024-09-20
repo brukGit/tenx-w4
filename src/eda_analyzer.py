@@ -60,9 +60,8 @@ class EDAAnalyzer:
             holidays = {
                 'New Year': ('12-25', '01-07'),  # Extended from Dec 25 to Jan 7
                 'Easter': ('03-22', '04-30'),    # Extended to cover potential Easter dates
-                'Independence Day': ('06-27', '07-11'),  # Week before and after July 4
                 'Halloween': ('10-24', '11-01'),  # Week before Halloween and day after
-                'Thanksgiving': ('11-20', '11-30'),  # Week before and few days after (includes Black Friday)
+                'Midsummer': ('06-14', '06-28'),  # Week before and few days after (includes Black Friday)
                 'Christmas': ('12-15', '12-31')  # Extended from Dec 15 to Dec 31
             }
             
@@ -94,10 +93,9 @@ class EDAAnalyzer:
             holiday_colors = {
                 'New Year': 'blue', 
                 'Easter': 'green', 
-                'Independence Day': 'red',
-                'Halloween': 'orange',
-                'Thanksgiving': 'brown',
-                'Christmas': 'darkgreen'
+                'Halloween': 'red',
+                'Midsummer': 'orange',
+                'Christmas': 'cyan'
             }
             for holiday in holidays.keys():
                 sns.scatterplot(data=daily_sales[daily_sales['Holiday'] == holiday], 

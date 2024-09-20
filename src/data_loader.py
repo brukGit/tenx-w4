@@ -40,7 +40,7 @@ class DataLoader:
             merged_train = pd.merge(self.train_data, self.store_data, on='Store', how='left')
             merged_test = pd.merge(self.test_data, self.store_data, on='Store', how='left')
             logging.info("Data merged successfully.")
-            return merged_train, merged_test
+            return merged_train, merged_test, self.store_data
         except Exception as e:
             logging.error(f"Error merging data: {str(e)}")
             raise

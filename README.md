@@ -1,8 +1,13 @@
-# AlphaCare Insurance Solutions (ACIS) Data Analysis Project
+# Rossmann Pharmaceuticals Sales Predictions Project
 
-## Project Overview
+## Story Line
 
-This project aims to analyze historical insurance claim data for AlphaCare Insurance Solutions (ACIS) to optimize marketing strategies and identify low-risk targets for potential premium reductions. The analysis covers data from February 2014 to August 2015.
+The finance team from Rossmann wants to forecast sales in all their stores across several cities six weeks ahead of time. Managers in individual stores rely on their years of experience as well as their personal judgment to forecast sales. 
+
+The data team identified factors such as promotions, competition, school and state holidays, seasonality, and locality as necessary for predicting the sales across the various stores.
+
+The job is to build and serve an end-to-end product that delivers this prediction to analysts in the finance team. 
+
 
 ## Table of Contents
 
@@ -30,21 +35,19 @@ project/
 ├── src/
 │   ├── __init__.py
 │   ├── data_loader.py
-│   ├── eda.py
-│   └── statistical_analysis.py
-│   └── hypothesis_testing.py
-│   └── statistical_modeling.py
+│   └── data_cleaner.py
+│   └── utils.py
+│   ├── eda_analyzer.py
+│   └── sales_analyzer.py
 ├── notebooks/
 │   ├── __init__.py
 │   ├── README.md
-│   └── exploratory_analysis.ipynb
-│   └── hypothesis_testing.ipynb
-│   └── statistical_modeling.ipynb
+│   └── eda_sales_analyzer.ipynb
 ├── tests/
 │   ├── __init__.py
 │   ├── test_data_loader.py
-│   ├── test_eda.py
-│   └── test_statistical_analysis.py
+│   ├── test_eda_analyzer.py
+│   └── test_sales_analyzer.py
 └── scripts/
     ├── __init__.py
     ├── README.md
@@ -55,8 +58,8 @@ project/
 
 1. Clone the repository:
    ```
-   git clone https://github.com/brukGit/tenx-w3.git
-   cd acis-data-analysis
+   git clone https://github.com/brukGit/tenx-w4.git
+   cd w4
    ```
 
 2. Create a virtual environment (optional but recommended):
@@ -72,7 +75,7 @@ project/
 
 ## Usage
 
-1. Place your data file in the `data/` directory.
+1. Place your data file in the `resources/Data/` directory.
 
 2. Run the main analysis script:
    ```
@@ -81,27 +84,29 @@ project/
 
 3. Open and run the Jupyter notebook for detailed exploratory data analysis:
    ```
-   jupyter notebook notebooks/exploratory_analysis.ipynb
+   jupyter notebook notebooks/eda_sales_analyzer.ipynb
    ```
 
 ## Data Description
 
-The dataset includes information about insurance policies, transactions, client details, car specifications, and claim information. Key columns include:
+The dataset includes information about stores, customers, state holidays, promotions, and competitors.
+Key columns include:
 
-- Policy information: UnderwrittenCoverID, PolicyID
-- Transaction details: TransactionMonth
-- Client information: IsVATRegistered, Citizenship, LegalType, etc.
-- Car details: ItemType, Make, Model, VehicleType, etc.
-- Insurance details: SumInsured, CalculatedPremiumPerTerm, etc.
-- Claim information: TotalPremium, TotalClaims
+- Promotional information - Promo, Promo2
+- Competitors : CompetitionDistance , CompetitionOpenSince
+- Customers and Sales: Customers, Sales, 
+- Store details: Store, StoreType, Open, etc. 
+- Holidays: StateHoliday, SchoolHoliday, etc.
+
 
 ## Analysis Components
 
 1. **Data Loading and Preprocessing**: Handled by `src/data_loader.py`
-2. **Exploratory Data Analysis**: Implemented in `src/eda.py` and demonstrated in the Jupyter notebook
-3. **Statistical Analysis**: Provided by `src/statistical_analysis.py`
-4. **Hypothesis Testing**: Provided by `src/hypothesis_testing.py`
-5. **Statistical Modeling**: Provided by `src/statistical_modeling.py`
+2. **Data Cleaning**: Handled by `src/data_cleaning.py`
+3. **Basic Data Overview**: Handled by `src/utils.py`
+4. **Exploratory Data Analysis**: Implemented in `src/eda_analyzer.py`
+5. **Sales Analysis**: Provided by `src/sales_analyzer.py`
+
 
 ## Running Tests
 
