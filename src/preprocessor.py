@@ -31,6 +31,7 @@ class PreprocessingError(Exception):
     pass
 class Preprocessor:
     def __init__(self):
+   
         self.scaler = StandardScaler()
         self.num_imputer = SimpleImputer(strategy='mean')
         self.cat_imputer = SimpleImputer(strategy='constant', fill_value='missing')
@@ -38,7 +39,6 @@ class Preprocessor:
         self.onehot = OneHotEncoder(handle_unknown='ignore', sparse_output=False)
         self.holidays = self._generate_holidays()
         logging.info(f"Initialized Preprocessor with {len(self.holidays)} holidays")
-
     def _generate_holidays(self):
         holidays = []
         for year in range(2013, 2016):
@@ -54,8 +54,11 @@ class Preprocessor:
         logging.info("Starting preprocessing...")
         logging.info(f"Initial DataFrame shape: {df.shape}\n columns: {df.columns.tolist()}")
 
+
         try:
+            date_column = df['Date']  # Store the Date column separately
             df = self._handle_missing_values_and_encode(df)
+            df['Date'] = date_column  # Add the Date column back
             df = self._extract_datetime_features(df)
         except PreprocessingError as e:
             logging.error(f"Preprocessing failed: {str(e)}")
@@ -63,7 +66,13 @@ class Preprocessor:
 
         logging.info(f"Final DataFrame shape: {df.shape}")
         logging.info("Preprocessing completed.")
+        logging.info("Data types after preprocessing:")
+        # for col in df.columns:
+        #     logging.info(f"{col}: {df[col].dtype}")
+
         return df
+        
+
 
     
     def _handle_missing_values_and_encode(self, df):
@@ -72,19 +81,25 @@ class Preprocessor:
         logging.info("Handling missing values, encoding categorical variables, and scaling numerical variables...")
         
         try:
-            # Identify column types
-            numerical_columns = ['Sales', 'Customers', 'Open', 'Promo', 'SchoolHoliday', 'CompetitionDistance', 
-                                 'CompetitionOpenSinceMonth', 'CompetitionOpenSinceYear', 'Promo2', 'Promo2SinceWeek', 'Promo2SinceYear']
-            label_encode_columns = ['Store', 'DayOfWeek']
-            onehot_encode_columns = ['StateHoliday', 'StoreType', 'Assortment', 'PromoInterval']
+            # Define expected column types
+            expected_numerical_columns = ['Sales', 'Customers', 'Open', 'Promo', 'SchoolHoliday', 'CompetitionDistance', 
+                                          'CompetitionOpenSinceMonth', 'CompetitionOpenSinceYear', 'Promo2', 'Promo2SinceWeek', 'Promo2SinceYear']
+            expected_label_encode_columns = ['Store', 'DayOfWeek']
+            expected_onehot_encode_columns = ['StateHoliday', 'StoreType', 'Assortment', 'PromoInterval']
+            
+            # Filter columns that actually exist in the DataFrame
+            numerical_columns = [col for col in expected_numerical_columns if col in df.columns]
+            label_encode_columns = [col for col in expected_label_encode_columns if col in df.columns]
+            onehot_encode_columns = [col for col in expected_onehot_encode_columns if col in df.columns]
             
             # Handle numerical columns
             for col in numerical_columns:
-                df[col] = self.num_imputer.fit_transform(df[[col]])
-                df[col] = self.scaler.fit_transform(df[[col]])
+                df[col] = self.num_imputer.fit_transform(df[[col]]).ravel()
+                df[col] = self.scaler.fit_transform(df[[col]]).ravel()
 
             # Handle label encoding
             for col in label_encode_columns:
+                df[col] = df[col].astype(str)  # Convert to string
                 le = LabelEncoder()
                 df[col] = le.fit_transform(df[col])
                 self.label_encoders[col] = le
@@ -92,17 +107,11 @@ class Preprocessor:
             # Handle one-hot encoding
             df_onehot = pd.DataFrame()
             for col in onehot_encode_columns:
-                # Handle missing values and ensure uniform data types (all strings)
+                df[col] = df[col].astype(str)  # Convert to string
                 df[col] = self.cat_imputer.fit_transform(df[[col]]).ravel()
-                df[col] = df[col].astype(str)  # Convert all values to strings to avoid mixed types
-                
-                # One-hot encoding
                 onehot_cols = self.onehot.fit_transform(df[[col]])
                 onehot_df = pd.DataFrame(onehot_cols, columns=[f"{col}_{cat}" for cat in self.onehot.categories_[0]])
-                
-                # Concatenate one-hot encoded columns to df_onehot
                 df_onehot = pd.concat([df_onehot, onehot_df], axis=1)
-                    
 
             # Combine all processed columns
             df_processed = pd.concat([df[numerical_columns + label_encode_columns], df_onehot], axis=1)
@@ -120,9 +129,9 @@ class Preprocessor:
     def _extract_datetime_features(self, df):
         try:
             # Check if the 'Date' column exists
-            if 'Date' not in df.columns:
-                logging.info(f"columns.. {df.columns.tolist()}")
-                raise KeyError("The 'Date' column is missing from the DataFrame.")
+            # if 'Date' not in df.columns:
+            #     logging.info(f"columns.. {df.columns.tolist()}")
+            #     raise KeyError("The 'Date' column is missing from the DataFrame.")
             
             df['Date'] = pd.to_datetime(df['Date'])
             df['Year'] = df['Date'].dt.year
