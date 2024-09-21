@@ -48,11 +48,14 @@ def main():
     # Evaluate model
     evaluator = Evaluator()
     metrics = evaluator.evaluate(y_val, y_pred)
-
+    
+    print("Model Performance Metrics:")
+    for metric, value in metrics.items():
+        print(f"{metric.upper()}: {value:.4f}")
     # Plot results
-    evaluator.plot_residuals(y_val, y_pred, '../notebooks/figures')
-    evaluator.plot_actual_vs_predicted(y_val, y_pred, '../notebooks/figures')
-    evaluator.plot_feature_importance(model, X.columns, '../notebooks/figures')
+    evaluator.plot_residuals(y_val, y_pred, '../models/figures')
+    evaluator.plot_actual_vs_predicted(y_val, y_pred, '../models/figures')
+    evaluator.plot_feature_importance(model, X.columns, '../models/figures')
 
     # Save model
     model_builder.save_model('../models')
@@ -65,7 +68,7 @@ def main():
     
     # Save predictions
     test['Predicted_Sales'] = test_predictions
-    test[['Id', 'Predicted_Sales']].to_csv('../predictions/test_predictions.csv', index=False)
+    test[['Id', 'Predicted_Sales']].to_csv('../models/predictions/test_predictions.csv', index=False)
 
 if __name__ == "__main__":
     main()
