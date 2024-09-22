@@ -42,14 +42,14 @@ class ModelBuilder:
             'bootstrap': [True, False]
         }
 
-        rf = RandomForestRegressor(random_state=42)
+        # rf = RandomForestRegressor(random_state=42)
+        # Initialize the model with specified parameters
+        self.model = RandomForestRegressor(n_estimators=100, max_depth=62, random_state=42)
         
-        self.model = RandomizedSearchCV(estimator=rf, param_distributions=param_dist, 
-                                        n_iter=20, cv=3, verbose=2, random_state=42, n_jobs=-1)
-        
+              
         try:
             self.model.fit(X, y)
-            logging.info(f"Best parameters: {self.model.best_params_}")
+            logging.info(f"Model built successfully.")
             return self.model
         except Exception as e:
             error_msg = f"Error in build_model: {str(e)}"
