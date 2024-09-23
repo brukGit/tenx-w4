@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import logging
+import pandas as pd
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -40,7 +41,7 @@ class Evaluator:
         plt.ylabel('Residuals')
         plt.axhline(y=0, color='r', linestyle='--')
         plt.savefig(f"{save_path}/residual_plot.png")
-        plt.close()
+        plt.show()
 
     def plot_actual_vs_predicted(self, y_true, y_pred, save_path):
         logging.info("Plotting actual vs predicted values...")
@@ -51,17 +52,29 @@ class Evaluator:
         plt.xlabel('Actual Values')
         plt.ylabel('Predicted Values')
         plt.savefig(f"{save_path}/actual_vs_predicted.png")
-        plt.close()
+        plt.show()
 
-    def plot_feature_importance(self, model, feature_names, save_path):
+    def plot_feature_importance(self, model, X, save_path):
         logging.info("Plotting feature importance...")
-        importances = model.best_estimator_.feature_importances_
-        indices = np.argsort(importances)[::-1]
+        
+        # Automatically determine feature names if X is a DataFrame or create generic names for arrays
+        if isinstance(X, pd.DataFrame):
+            feature_names = X.columns
+        else:
+            num_features = X.shape[1]
+            feature_names = [f'Feature {i+1}' for i in range(num_features)]
 
+        # Get feature importances from the RandomForestRegressor model
+        importances = model.feature_importances_
+        indices = np.argsort(importances)[::-1]  # Sort in descending order
+
+        # Plotting feature importances
         plt.figure(figsize=(12, 8))
         plt.title("Feature Importances")
         plt.bar(range(len(importances)), importances[indices])
         plt.xticks(range(len(importances)), [feature_names[i] for i in indices], rotation=90)
         plt.tight_layout()
+        
+        # Save the plot
         plt.savefig(f"{save_path}/feature_importance.png")
-        plt.close()
+        plt.show()

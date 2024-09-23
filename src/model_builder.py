@@ -44,7 +44,7 @@ class ModelBuilder:
 
         # rf = RandomForestRegressor(random_state=42)
         # Initialize the model with specified parameters
-        self.model = RandomForestRegressor(n_estimators=100, max_depth=62, random_state=42)
+        self.model = RandomForestRegressor(n_estimators=200, max_depth = 40, random_state=42)
         
               
         try:
