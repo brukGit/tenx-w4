@@ -16,9 +16,10 @@ The job is to build and serve an end-to-end product that delivers this predictio
 3. [Usage](#usage)
 4. [Data Description](#data-description)
 5. [Analysis Components](#analysis-components)
-6. [Running Tests](#running-tests)
-7. [Contributing](#contributing)
-8. [License](#license)
+6. [Model building Components](#model-building-components)
+7. [Running Tests](#running-tests)
+8. [Contributing](#contributing)
+9. [License](#license)
 
 ## Project Structure
 
@@ -48,6 +49,9 @@ project/
 │   ├── test_data_loader.py
 │   ├── test_eda_analyzer.py
 │   └── test_sales_analyzer.py
+├── app/
+│   ├── __init__.py
+│   ├── main.py
 └── scripts/
     ├── __init__.py
     ├── README.md
@@ -87,6 +91,11 @@ project/
    jupyter notebook notebooks/eda_sales_analyzer.ipynb
    ```
 
+4. Open and run the Jupyter notebook 'sales_forecast.ipynb' to build model:
+   ```
+   jupyter notebook notebooks/sales_forecast.ipynb
+   ```
+
 ## Data Description
 
 The dataset includes information about stores, customers, state holidays, promotions, and competitors.
@@ -107,6 +116,9 @@ Key columns include:
 4. **Exploratory Data Analysis**: Implemented in `src/eda_analyzer.py`
 5. **Sales Analysis**: Provided by `src/sales_analyzer.py`
 
+## Model building Components
+1. **Data preprocessing priod to model fitting**: Handled by `src/preprocessor.py`
+2. **Model fitting and build**: Handled by `src/model_builder.py`
 
 ## Running Tests
 
