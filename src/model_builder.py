@@ -34,17 +34,9 @@ class ModelBuilder:
         # Log the final set of features being used
         logging.info(f"Features used for modeling: {X.columns.tolist()}")
         
-        param_dist = {
-            'n_estimators': [100, 200, 300],
-            'max_depth': [10, 20, 30, None],
-            'min_samples_split': [2, 5],
-            'min_samples_leaf': [1, 2],
-            'bootstrap': [True, False]
-        }
 
-        # rf = RandomForestRegressor(random_state=42)
         # Initialize the model with specified parameters
-        self.model = RandomForestRegressor(n_estimators=200, max_depth = 40, random_state=42)
+        self.model = RandomForestRegressor(n_estimators=20, max_depth = 65, random_state=42)
         
               
         try:

@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Depends
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 import joblib
 import pandas as pd
@@ -46,6 +47,15 @@ def load_model():
     latest_model = max(model_files, key=lambda x: os.path.getctime(os.path.join(model_dir, x)))
     model_path = os.path.join(model_dir, latest_model)
     return joblib.load(model_path)
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    file_name = "favicon.ico"
+    file_path = os.path.join(os.path.dirname(__file__), 'assets', file_name)
+    if os.path.exists(file_path):
+        return FileResponse(file_path)
+    else:
+        return {"message": "Favicon not found"}, 404
 
 @app.on_event("startup")
 async def startup_event():
