@@ -6,3 +6,5 @@ notebooks/figures/
 data/machineLearning.txt
 /machineLearning.txt
 .dvc/cache
+notebooks/figures/
+models/
