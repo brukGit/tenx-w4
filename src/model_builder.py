@@ -36,7 +36,7 @@ class ModelBuilder:
         
 
         # Initialize the model with specified parameters
-        self.model = RandomForestRegressor(n_estimators=20, max_depth = 65, random_state=42)
+        self.model = RandomForestRegressor(n_estimators=12, max_depth = 40, random_state=42)
         
               
         try:

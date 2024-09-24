@@ -51,27 +51,22 @@ class Preprocessor:
         return pd.to_datetime(holidays)
 
     def preprocess(self, df):
-        # Extract date features
-        df['Year'] = pd.to_datetime(df['Date']).dt.year
-        df['Month'] = pd.to_datetime(df['Date']).dt.month
-        df['Day'] = pd.to_datetime(df['Date']).dt.day
-        
-        # Handle numeric features
-        numeric_data = self.num_imputer.fit_transform(df[self.numeric_features])
-        scaled_numeric = self.scaler.fit_transform(numeric_data)
-        
-        # Handle categorical features
-        categorical_data = df[self.categorical_features].fillna('Unknown')
-        onehot_data = self.onehot.fit_transform(categorical_data)
-        
-        # Combine features
-        processed_data = np.hstack([scaled_numeric, onehot_data])
-        
-        # Create feature names
-        onehot_columns = self.onehot.get_feature_names_out(self.categorical_features)
-        all_features = self.numeric_features + list(onehot_columns) + ['Year', 'Month', 'Day']
-        
-        return pd.DataFrame(processed_data, columns=all_features)      
+        try:
+            date_column = df['Date']  # Store the Date column separately
+            df = self._handle_missing_values_and_encode(df)
+            df['Date'] = date_column  # Add the Date column back
+            df = self._extract_datetime_features(df)
+        except PreprocessingError as e:
+            logging.error(f"Preprocessing failed: {str(e)}")
+            raise
+
+        logging.info(f"Final DataFrame shape: {df.shape}")
+        logging.info("Preprocessing completed.")
+        logging.info("Data types after preprocessing:")
+        # for col in df.columns:
+        #     logging.info(f"{col}: {df[col].dtype}")
+
+        return df   
     
     def _handle_missing_values_and_encode(self, df):
         start_time = time.time()
